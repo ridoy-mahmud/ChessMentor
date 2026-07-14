@@ -9,14 +9,28 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as StormRouteImport } from './routes/storm'
+import { Route as RushRouteImport } from './routes/rush'
 import { Route as PuzzlesRouteImport } from './routes/puzzles'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as PracticeRouteImport } from './routes/practice'
 import { Route as PlayRouteImport } from './routes/play'
 import { Route as LearnRouteImport } from './routes/learn'
 import { Route as GuessRouteImport } from './routes/guess'
 import { Route as EditorRouteImport } from './routes/editor'
+import { Route as CoordinateRouteImport } from './routes/coordinate'
 import { Route as IndexRouteImport } from './routes/index'
 
+const StormRoute = StormRouteImport.update({
+  id: '/storm',
+  path: '/storm',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RushRoute = RushRouteImport.update({
+  id: '/rush',
+  path: '/rush',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PuzzlesRoute = PuzzlesRouteImport.update({
   id: '/puzzles',
   path: '/puzzles',
@@ -25,6 +39,11 @@ const PuzzlesRoute = PuzzlesRouteImport.update({
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PracticeRoute = PracticeRouteImport.update({
+  id: '/practice',
+  path: '/practice',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlayRoute = PlayRouteImport.update({
@@ -47,6 +66,11 @@ const EditorRoute = EditorRouteImport.update({
   path: '/editor',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CoordinateRoute = CoordinateRouteImport.update({
+  id: '/coordinate',
+  path: '/coordinate',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -55,61 +79,116 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/coordinate': typeof CoordinateRoute
   '/editor': typeof EditorRoute
   '/guess': typeof GuessRoute
   '/learn': typeof LearnRoute
   '/play': typeof PlayRoute
+  '/practice': typeof PracticeRoute
   '/profile': typeof ProfileRoute
   '/puzzles': typeof PuzzlesRoute
+  '/rush': typeof RushRoute
+  '/storm': typeof StormRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/coordinate': typeof CoordinateRoute
   '/editor': typeof EditorRoute
   '/guess': typeof GuessRoute
   '/learn': typeof LearnRoute
   '/play': typeof PlayRoute
+  '/practice': typeof PracticeRoute
   '/profile': typeof ProfileRoute
   '/puzzles': typeof PuzzlesRoute
+  '/rush': typeof RushRoute
+  '/storm': typeof StormRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/coordinate': typeof CoordinateRoute
   '/editor': typeof EditorRoute
   '/guess': typeof GuessRoute
   '/learn': typeof LearnRoute
   '/play': typeof PlayRoute
+  '/practice': typeof PracticeRoute
   '/profile': typeof ProfileRoute
   '/puzzles': typeof PuzzlesRoute
+  '/rush': typeof RushRoute
+  '/storm': typeof StormRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/editor' | '/guess' | '/learn' | '/play' | '/profile' | '/puzzles'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/editor' | '/guess' | '/learn' | '/play' | '/profile' | '/puzzles'
-  id:
-    | '__root__'
     | '/'
+    | '/coordinate'
     | '/editor'
     | '/guess'
     | '/learn'
     | '/play'
+    | '/practice'
     | '/profile'
     | '/puzzles'
+    | '/rush'
+    | '/storm'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/coordinate'
+    | '/editor'
+    | '/guess'
+    | '/learn'
+    | '/play'
+    | '/practice'
+    | '/profile'
+    | '/puzzles'
+    | '/rush'
+    | '/storm'
+  id:
+    | '__root__'
+    | '/'
+    | '/coordinate'
+    | '/editor'
+    | '/guess'
+    | '/learn'
+    | '/play'
+    | '/practice'
+    | '/profile'
+    | '/puzzles'
+    | '/rush'
+    | '/storm'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CoordinateRoute: typeof CoordinateRoute
   EditorRoute: typeof EditorRoute
   GuessRoute: typeof GuessRoute
   LearnRoute: typeof LearnRoute
   PlayRoute: typeof PlayRoute
+  PracticeRoute: typeof PracticeRoute
   ProfileRoute: typeof ProfileRoute
   PuzzlesRoute: typeof PuzzlesRoute
+  RushRoute: typeof RushRoute
+  StormRoute: typeof StormRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/storm': {
+      id: '/storm'
+      path: '/storm'
+      fullPath: '/storm'
+      preLoaderRoute: typeof StormRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rush': {
+      id: '/rush'
+      path: '/rush'
+      fullPath: '/rush'
+      preLoaderRoute: typeof RushRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/puzzles': {
       id: '/puzzles'
       path: '/puzzles'
@@ -122,6 +201,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/practice': {
+      id: '/practice'
+      path: '/practice'
+      fullPath: '/practice'
+      preLoaderRoute: typeof PracticeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/play': {
@@ -152,6 +238,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EditorRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/coordinate': {
+      id: '/coordinate'
+      path: '/coordinate'
+      fullPath: '/coordinate'
+      preLoaderRoute: typeof CoordinateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -164,12 +257,16 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CoordinateRoute: CoordinateRoute,
   EditorRoute: EditorRoute,
   GuessRoute: GuessRoute,
   LearnRoute: LearnRoute,
   PlayRoute: PlayRoute,
+  PracticeRoute: PracticeRoute,
   ProfileRoute: ProfileRoute,
   PuzzlesRoute: PuzzlesRoute,
+  RushRoute: RushRoute,
+  StormRoute: StormRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

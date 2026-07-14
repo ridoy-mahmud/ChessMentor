@@ -54,9 +54,11 @@
 
   /* Elevation */
   --shadow-e1: 0 1px 2px 0 color-mix(in oklab, var(--foreground) 6%, transparent);
-  --shadow-e2: 0 4px 12px -4px color-mix(in oklab, var(--foreground) 14%, transparent),
+  --shadow-e2:
+    0 4px 12px -4px color-mix(in oklab, var(--foreground) 14%, transparent),
     0 1px 2px 0 color-mix(in oklab, var(--foreground) 6%, transparent);
-  --shadow-e3: 0 20px 40px -12px color-mix(in oklab, var(--foreground) 22%, transparent),
+  --shadow-e3:
+    0 20px 40px -12px color-mix(in oklab, var(--foreground) 22%, transparent),
     0 8px 16px -8px color-mix(in oklab, var(--foreground) 10%, transparent);
 }
 
@@ -164,6 +166,71 @@
 .board-theme-emerald {
   --board-light: oklch(0.94 0.02 140);
   --board-dark: oklch(0.5 0.08 155);
+}
+.board-theme-walnut {
+  --board-light: oklch(0.88 0.03 70);
+  --board-dark: oklch(0.42 0.06 45);
+}
+.board-theme-glass {
+  --board-light: oklch(0.96 0.01 220);
+  --board-dark: oklch(0.72 0.03 220);
+}
+.board-theme-coral {
+  --board-light: oklch(0.94 0.02 60);
+  --board-dark: oklch(0.62 0.13 30);
+}
+.board-theme-midnight {
+  --board-light: oklch(0.7 0.05 260);
+  --board-dark: oklch(0.32 0.06 265);
+}
+.board-theme-classic {
+  --board-light: oklch(0.93 0.03 95);
+  --board-dark: oklch(0.5 0.09 145);
+}
+.board-theme-sandstone {
+  --board-light: oklch(0.92 0.03 80);
+  --board-dark: oklch(0.58 0.07 55);
+}
+.board-theme-ocean {
+  --board-light: oklch(0.9 0.03 220);
+  --board-dark: oklch(0.42 0.09 235);
+}
+
+/* Piece-set styling: filters on react-chessboard piece <img>s. Applies to
+   the standard SVG piece set from the underlying board component. */
+.pieces-classic [data-square] img {
+  filter: contrast(1.05);
+}
+.pieces-neo [data-square] img {
+  filter: saturate(1.2) contrast(1.1);
+}
+.pieces-wood [data-square] img {
+  filter: sepia(0.25) saturate(1.15);
+}
+.pieces-marble [data-square] img {
+  filter: grayscale(0.35) contrast(1.05);
+}
+.pieces-accessibility [data-square] img {
+  filter: contrast(1.35) drop-shadow(0 0 0.5px currentColor);
+}
+
+/* Dark-mode piece contrast fix — soft outline halo so dark pieces
+   remain legible on dark squares in all themes. */
+.dark [data-square] img {
+  filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.55)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55));
+}
+.dark.pieces-accessibility [data-square] img,
+.dark .pieces-accessibility [data-square] img {
+  filter: contrast(1.35) drop-shadow(0 0 1.5px rgba(255, 255, 255, 0.8))
+    drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55));
+}
+
+/* Reduced motion global kill-switch */
+.reduced-motion *,
+.reduced-motion *::before,
+.reduced-motion *::after {
+  animation-duration: 0.001ms !important;
+  transition-duration: 0.001ms !important;
 }
 
 @layer base {

@@ -9,7 +9,16 @@ import {
 } from "@/lib/chess/settings";
 
 type NavItem = {
-  to: "/" | "/learn" | "/play" | "/puzzles" | "/editor" | "/guess" | "/profile";
+  to:
+    | "/"
+    | "/learn"
+    | "/play"
+    | "/puzzles"
+    | "/rush"
+    | "/coordinate"
+    | "/practice"
+    | "/guess"
+    | "/profile";
   label: string;
   exact?: boolean;
 };
@@ -19,8 +28,9 @@ const NAV: NavItem[] = [
   { to: "/learn", label: "Learn" },
   { to: "/play", label: "Play" },
   { to: "/puzzles", label: "Puzzles" },
-  { to: "/editor", label: "Editor" },
-  { to: "/guess", label: "Guess" },
+  { to: "/rush", label: "Rush" },
+  { to: "/coordinate", label: "Trainer" },
+  { to: "/practice", label: "Practice" },
   { to: "/profile", label: "Profile" },
 ];
 

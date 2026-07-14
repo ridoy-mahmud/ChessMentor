@@ -1,9 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Trophy, TrendingUp } from "lucide-react";
+import { Award, Crown, Trophy, TrendingUp } from "lucide-react";
+import { useEffect } from "react";
 import { useProgress } from "@/lib/chess/progress";
 import { useGameTrend } from "@/lib/chess/gameTrend";
 import { buildStudyPlan, type StudyItem } from "@/lib/chess/studyPlan";
 import { LESSONS } from "@/lib/chess/lessons";
+import { initRating, resetTiltCounter, useRating } from "@/lib/chess/rating";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
@@ -18,7 +20,9 @@ export const Route = createFileRoute("/profile")({
 function ProfilePage() {
   const progress = useProgress();
   const trend = useGameTrend();
+  const rating = useRating();
   const plan = buildStudyPlan();
+  useEffect(() => { initRating(); }, []);
 
   const totalStars = Object.values(progress).reduce((s, p) => s + (p.stars ?? 0), 0);
   const maxStars = LESSONS.length * 3;
@@ -48,6 +52,35 @@ function ProfilePage() {
         />
         <StatCard label="Record" value={`${wins}W · ${draws}D · ${losses}L`} icon={<Trophy className="h-5 w-5" />} />
       </div>
+
+      <section className="mt-8">
+        <h2 className="mb-3 flex items-center gap-2 font-display text-xl font-semibold">
+          <Crown className="h-5 w-5 text-primary" /> Competitive ladder
+        </h2>
+        <div className="grid gap-4 sm:grid-cols-4">
+          <StatCard label="Rating" value={String(rating.rating)} icon={<Award className="h-5 w-5" />} />
+          <StatCard label="Season peak" value={String(rating.seasonPeak)} icon={<TrendingUp className="h-5 w-5" />} />
+          <StatCard label="Season games" value={String(rating.seasonGames)} icon={<Trophy className="h-5 w-5" />} />
+          <StatCard label="Season" value={rating.seasonId} icon={<Crown className="h-5 w-5" />} />
+        </div>
+        {rating.consecutiveLosses >= 3 && (
+          <div className="mt-3 rounded-xl border border-amber/40 bg-amber/5 p-4 text-sm">
+            <p>
+              Three losses in a row — consider a{" "}
+              <Link to="/practice" className="font-medium text-primary underline">practice drill</Link>{" "}
+              or{" "}
+              <Link to="/coordinate" className="font-medium text-primary underline">quick trainer</Link>{" "}
+              before the next rated game.
+            </p>
+            <button
+              onClick={resetTiltCounter}
+              className="mt-2 text-xs text-muted-foreground underline"
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
+      </section>
 
       <section className="mt-8">
         <div className="mb-3 flex items-baseline justify-between">

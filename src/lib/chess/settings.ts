@@ -2,7 +2,24 @@ import { useSyncExternalStore } from "react";
 import { setMuted } from "./sounds";
 
 export type Theme = "light" | "dark";
-export type BoardTheme = "warm" | "slate" | "emerald";
+export type BoardTheme =
+  | "warm"
+  | "slate"
+  | "emerald"
+  | "walnut"
+  | "glass"
+  | "coral"
+  | "midnight"
+  | "classic"
+  | "sandstone"
+  | "ocean";
+export type PieceSet =
+  | "minimal"
+  | "classic"
+  | "neo"
+  | "wood"
+  | "marble"
+  | "accessibility";
 export type PlayAnalyticsMode = "learning" | "competitive";
 
 export type Settings = {
@@ -11,9 +28,11 @@ export type Settings = {
   showCoords: boolean;
   boardOrientation: "white" | "black";
   boardTheme: BoardTheme;
+  pieceSet: PieceSet;
   socratic: boolean;
   analyticsMode: PlayAnalyticsMode;
   showThreatRadar: boolean;
+  reducedMotion: boolean;
 };
 
 const DEFAULTS: Settings = {
@@ -22,12 +41,18 @@ const DEFAULTS: Settings = {
   showCoords: true,
   boardOrientation: "white",
   boardTheme: "warm",
+  pieceSet: "minimal",
   socratic: false,
   analyticsMode: "learning",
   showThreatRadar: true,
+  reducedMotion: false,
 };
 
-const KEY = "chessmentor:settings:v2";
+const KEY = "chessmentor:settings:v3";
+const ALL_THEMES: BoardTheme[] = [
+  "warm", "slate", "emerald", "walnut", "glass", "coral", "midnight", "classic", "sandstone", "ocean",
+];
+const ALL_PIECES: PieceSet[] = ["minimal", "classic", "neo", "wood", "marble", "accessibility"];
 
 let state: Settings = { ...DEFAULTS };
 const listeners = new Set<() => void>();
@@ -54,11 +79,13 @@ function persist() {
 function applySideEffects() {
   if (typeof document !== "undefined") {
     document.documentElement.classList.toggle("dark", state.theme === "dark");
-    // Board theme class on body
     const body = document.body;
     if (body) {
-      body.classList.remove("board-theme-warm", "board-theme-slate", "board-theme-emerald");
+      ALL_THEMES.forEach((t) => body.classList.remove(`board-theme-${t}`));
       body.classList.add(`board-theme-${state.boardTheme}`);
+      ALL_PIECES.forEach((p) => body.classList.remove(`pieces-${p}`));
+      body.classList.add(`pieces-${state.pieceSet}`);
+      body.classList.toggle("reduced-motion", state.reducedMotion);
     }
   }
   setMuted(state.muted);
@@ -100,8 +127,14 @@ export function setAnalyticsMode(m: PlayAnalyticsMode) {
 export function setBoardTheme(t: BoardTheme) {
   updateSettings({ boardTheme: t });
 }
+export function setPieceSet(p: PieceSet) {
+  updateSettings({ pieceSet: p });
+}
 export function toggleThreatRadar() {
   updateSettings({ showThreatRadar: !state.showThreatRadar });
+}
+export function toggleReducedMotion() {
+  updateSettings({ reducedMotion: !state.reducedMotion });
 }
 
 function subscribe(l: () => void) {
@@ -118,3 +151,28 @@ export function useSettings(): Settings {
     () => DEFAULTS,
   );
 }
+
+export const BOARD_THEME_META: Record<BoardTheme, { label: string; blurb: string }> = {
+  warm: { label: "Walnut Warm", blurb: "Default warm-neutral pair." },
+  slate: { label: "Slate", blurb: "Cool blue-grey." },
+  emerald: { label: "Emerald", blurb: "Muted green." },
+  walnut: { label: "Walnut", blurb: "Rich brown wood tones." },
+  glass: { label: "Glass", blurb: "Frosted, translucent feel." },
+  coral: { label: "Coral Reef", blurb: "Warm coral & cream." },
+  midnight: { label: "Midnight", blurb: "Deep indigo for night play." },
+  classic: { label: "Classic Tournament", blurb: "Traditional green & cream." },
+  sandstone: { label: "Sandstone", blurb: "Warm desert palette." },
+  ocean: { label: "Ocean", blurb: "Cool blue depth." },
+};
+
+export const PIECE_SET_META: Record<PieceSet, { label: string; blurb: string }> = {
+  minimal: { label: "Minimal Line", blurb: "Clean modern outlines." },
+  classic: { label: "Classic Staunton", blurb: "Traditional silhouette." },
+  neo: { label: "Neo", blurb: "Bold geometric modern." },
+  wood: { label: "Wood-textured", blurb: "Subtle grain, still flat." },
+  marble: { label: "Marble", blurb: "Cool stone finish." },
+  accessibility: { label: "Accessibility", blurb: "Thick outlines, high contrast." },
+};
+
+export const ALL_BOARD_THEMES = ALL_THEMES;
+export const ALL_PIECE_SETS = ALL_PIECES;
