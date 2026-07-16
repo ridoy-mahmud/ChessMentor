@@ -54,11 +54,9 @@
 
   /* Elevation */
   --shadow-e1: 0 1px 2px 0 color-mix(in oklab, var(--foreground) 6%, transparent);
-  --shadow-e2:
-    0 4px 12px -4px color-mix(in oklab, var(--foreground) 14%, transparent),
+  --shadow-e2: 0 4px 12px -4px color-mix(in oklab, var(--foreground) 14%, transparent),
     0 1px 2px 0 color-mix(in oklab, var(--foreground) 6%, transparent);
-  --shadow-e3:
-    0 20px 40px -12px color-mix(in oklab, var(--foreground) 22%, transparent),
+  --shadow-e3: 0 20px 40px -12px color-mix(in oklab, var(--foreground) 22%, transparent),
     0 8px 16px -8px color-mix(in oklab, var(--foreground) 10%, transparent);
 }
 
@@ -104,12 +102,12 @@
   --board-check: oklch(0.6 0.22 27 / 55%);
 
   /* Move quality tokens (Phase 11) */
-  --q-brilliant: oklch(0.6 0.2 300); /* #7C3AED purple */
-  --q-great: oklch(0.62 0.14 200); /* teal-cyan */
-  --q-good: oklch(0.62 0.15 145); /* success green */
-  --q-inaccuracy: oklch(0.7 0.16 75); /* amber */
-  --q-mistake: oklch(0.65 0.18 45); /* orange */
-  --q-blunder: oklch(0.58 0.22 27); /* red */
+  --q-brilliant: oklch(0.6 0.2 300);
+  --q-great: oklch(0.62 0.14 200);
+  --q-good: oklch(0.62 0.15 145);
+  --q-inaccuracy: oklch(0.7 0.16 75);
+  --q-mistake: oklch(0.65 0.18 45);
+  --q-blunder: oklch(0.58 0.22 27);
 }
 
 .dark {
@@ -122,7 +120,6 @@
   --popover: oklch(0.21 0.006 60);
   --popover-foreground: oklch(0.96 0.004 80);
 
-  /* Ink Teal dark — #2DD4BF */
   --primary: oklch(0.78 0.13 185);
   --primary-foreground: oklch(0.14 0.006 60);
 
@@ -133,7 +130,6 @@
   --accent: oklch(0.3 0.05 185);
   --accent-foreground: oklch(0.9 0.1 185);
 
-  /* Warm Amber dark — #FBBF24 */
   --amber: oklch(0.82 0.15 82);
   --amber-foreground: oklch(0.16 0.006 60);
 
@@ -144,11 +140,15 @@
   --input: oklch(1 0 0 / 13%);
   --ring: oklch(0.78 0.13 185);
 
-  --board-light: oklch(0.44 0.012 85);
-  --board-dark: oklch(0.28 0.012 155);
-  --board-highlight: oklch(0.78 0.13 185 / 45%);
-  --board-lastmove: oklch(0.72 0.14 95 / 45%);
-  --board-check: oklch(0.65 0.2 27 / 55%);
+  /* Phase 17 dark-mode board defaults — dedicated pair with a wide luminance
+     gap so the grid reads instantly and pieces never blend into squares.
+     Light square: warm dim cream (not stark white).
+     Dark square: desaturated slate-teal, well above near-black. */
+  --board-light: oklch(0.74 0.018 85);
+  --board-dark: oklch(0.42 0.018 155);
+  --board-highlight: oklch(0.82 0.14 185 / 55%);
+  --board-lastmove: oklch(0.82 0.16 95 / 55%);
+  --board-check: oklch(0.7 0.22 27 / 65%);
 
   --q-brilliant: oklch(0.72 0.2 300);
   --q-great: oklch(0.75 0.14 200);
@@ -158,7 +158,7 @@
   --q-blunder: oklch(0.68 0.22 27);
 }
 
-/* Alternate board themes toggled via .board-theme-* on body */
+/* Alternate board themes — LIGHT MODE values. */
 .board-theme-slate {
   --board-light: oklch(0.93 0.006 240);
   --board-dark: oklch(0.55 0.03 250);
@@ -196,33 +196,98 @@
   --board-dark: oklch(0.42 0.09 235);
 }
 
-/* Piece-set styling: filters on react-chessboard piece <img>s. Applies to
-   the standard SVG piece set from the underlying board component. */
-.pieces-classic [data-square] img {
-  filter: contrast(1.05);
+/* Phase 17 — DEDICATED DARK-MODE VARIANTS for every board theme.
+   Each pair is tuned independently: light square dimmed but warm, dark
+   square lightened + desaturated so it never approaches black, always
+   maintaining a clear luminance gap. */
+.dark.board-theme-warm, .dark .board-theme-warm {
+  --board-light: oklch(0.74 0.018 85);
+  --board-dark: oklch(0.42 0.018 155);
 }
-.pieces-neo [data-square] img {
-  filter: saturate(1.2) contrast(1.1);
+.dark.board-theme-slate, .dark .board-theme-slate {
+  --board-light: oklch(0.72 0.015 240);
+  --board-dark: oklch(0.4 0.028 250);
 }
-.pieces-wood [data-square] img {
-  filter: sepia(0.25) saturate(1.15);
+.dark.board-theme-emerald, .dark .board-theme-emerald {
+  --board-light: oklch(0.72 0.03 140);
+  --board-dark: oklch(0.4 0.055 155);
 }
-.pieces-marble [data-square] img {
-  filter: grayscale(0.35) contrast(1.05);
+.dark.board-theme-walnut, .dark .board-theme-walnut {
+  --board-light: oklch(0.7 0.04 70);
+  --board-dark: oklch(0.36 0.05 45);
 }
+.dark.board-theme-glass, .dark .board-theme-glass {
+  --board-light: oklch(0.75 0.015 220);
+  --board-dark: oklch(0.46 0.025 220);
+}
+.dark.board-theme-coral, .dark .board-theme-coral {
+  --board-light: oklch(0.75 0.035 60);
+  --board-dark: oklch(0.46 0.1 30);
+}
+.dark.board-theme-midnight, .dark .board-theme-midnight {
+  --board-light: oklch(0.6 0.055 260);
+  --board-dark: oklch(0.3 0.05 265);
+}
+.dark.board-theme-classic, .dark .board-theme-classic {
+  --board-light: oklch(0.74 0.045 95);
+  --board-dark: oklch(0.4 0.07 145);
+}
+.dark.board-theme-sandstone, .dark .board-theme-sandstone {
+  --board-light: oklch(0.73 0.045 80);
+  --board-dark: oklch(0.44 0.06 55);
+}
+.dark.board-theme-ocean, .dark .board-theme-ocean {
+  --board-light: oklch(0.72 0.04 220);
+  --board-dark: oklch(0.38 0.075 235);
+}
+
+/* Piece-set styling. Applies filters to react-chessboard piece <img>s. */
+.pieces-minimal [data-square] img { filter: none; }
+
+/* Phase 17 default — "Classic 3D": chess.com-inspired treatment.
+   Bumps contrast + adds a soft internal shading via drop-shadow stack
+   and a subtle contact shadow beneath the piece for volume. */
+.pieces-classic3d [data-square] img {
+  filter:
+    contrast(1.08) saturate(1.05)
+    drop-shadow(0 0 0.5px rgba(0, 0, 0, 0.35))
+    drop-shadow(0 2px 3px rgba(0, 0, 0, 0.28));
+}
+
+.pieces-classic [data-square] img { filter: contrast(1.05); }
+.pieces-neo [data-square] img { filter: saturate(1.2) contrast(1.1); }
+.pieces-wood [data-square] img { filter: sepia(0.25) saturate(1.15); }
+.pieces-marble [data-square] img { filter: grayscale(0.35) contrast(1.05); }
 .pieces-accessibility [data-square] img {
   filter: contrast(1.35) drop-shadow(0 0 0.5px currentColor);
 }
 
-/* Dark-mode piece contrast fix — soft outline halo so dark pieces
-   remain legible on dark squares in all themes. */
-.dark [data-square] img {
-  filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.55)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55));
+/* Phase 17 — Dark-mode piece pass. Universal soft halo + contact shadow
+   so both white pieces (soft dark contact-shadow, no harsh glow) and
+   black pieces (light rim outline) separate cleanly from any dark
+   square color across every board theme. Overrides the light-mode
+   piece-set filter in dark mode. */
+.dark .pieces-minimal [data-square] img,
+.dark .pieces-classic [data-square] img,
+.dark .pieces-neo [data-square] img,
+.dark .pieces-wood [data-square] img,
+.dark .pieces-marble [data-square] img {
+  filter:
+    drop-shadow(0 0 1.1px rgba(255, 255, 255, 0.7))
+    drop-shadow(0 0 0.6px rgba(255, 255, 255, 0.5))
+    drop-shadow(0 2px 3px rgba(0, 0, 0, 0.55));
 }
-.dark.pieces-accessibility [data-square] img,
+.dark .pieces-classic3d [data-square] img {
+  filter:
+    contrast(1.1) saturate(1.08)
+    drop-shadow(0 0 1.2px rgba(255, 255, 255, 0.75))
+    drop-shadow(0 0 0.6px rgba(255, 255, 255, 0.55))
+    drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+}
 .dark .pieces-accessibility [data-square] img {
-  filter: contrast(1.35) drop-shadow(0 0 1.5px rgba(255, 255, 255, 0.8))
-    drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55));
+  filter: contrast(1.4)
+    drop-shadow(0 0 1.5px rgba(255, 255, 255, 0.85))
+    drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6));
 }
 
 /* Reduced motion global kill-switch */
@@ -232,6 +297,71 @@
   animation-duration: 0.001ms !important;
   transition-duration: 0.001ms !important;
 }
+
+/* ============================================================
+   Phase 18–19: motion & card polish
+   ============================================================ */
+
+@keyframes bot-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.035); }
+}
+@keyframes bot-think {
+  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+  50% { transform: translateY(-2px) rotate(1.5deg); }
+}
+.bot-avatar { animation: bot-breathe 4.2s ease-in-out infinite; transform-origin: 50% 60%; will-change: transform; }
+.bot-avatar[data-thinking="true"] { animation: bot-think 0.55s ease-in-out infinite; }
+.reduced-motion .bot-avatar { animation: none; }
+
+@keyframes hero-glow-drift {
+  0%   { transform: translate3d(0,0,0) scale(1); opacity: 0.55; filter: hue-rotate(0deg); }
+  50%  { transform: translate3d(2%,-2%,0) scale(1.06); opacity: 0.75; filter: hue-rotate(18deg); }
+  100% { transform: translate3d(0,0,0) scale(1); opacity: 0.55; filter: hue-rotate(0deg); }
+}
+.hero-glow {
+  position: absolute; inset: -12%;
+  background:
+    radial-gradient(closest-side at 30% 40%, color-mix(in oklab, var(--color-primary) 45%, transparent), transparent 65%),
+    radial-gradient(closest-side at 70% 60%, color-mix(in oklab, var(--color-amber) 40%, transparent), transparent 65%);
+  filter: blur(40px);
+  animation: hero-glow-drift 14s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+.reduced-motion .hero-glow { animation: none; }
+
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-page-in { animation: page-in 220ms ease-out both; }
+.reduced-motion .animate-page-in { animation: none; }
+
+.app-card {
+  border-color: color-mix(in oklab, var(--color-primary) 12%, var(--color-border));
+  box-shadow:
+    0 1px 2px 0 color-mix(in oklab, var(--foreground) 6%, transparent),
+    0 8px 24px -12px color-mix(in oklab, var(--foreground) 10%, transparent);
+}
+.app-card:hover {
+  box-shadow:
+    0 2px 4px 0 color-mix(in oklab, var(--foreground) 8%, transparent),
+    0 16px 34px -14px color-mix(in oklab, var(--foreground) 18%, transparent);
+  border-color: color-mix(in oklab, var(--color-primary) 30%, var(--color-border));
+}
+
+button:not(:disabled):active,
+a:active { transform: translateY(0.5px) scale(0.985); }
+
+.lesson-path-line {
+  stroke: color-mix(in oklab, var(--color-primary) 35%, transparent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  fill: none;
+  stroke-dasharray: 6 8;
+}
+.lesson-node-mastered { filter: drop-shadow(0 0 8px color-mix(in oklab, var(--color-primary) 55%, transparent)); }
 
 @layer base {
   * {

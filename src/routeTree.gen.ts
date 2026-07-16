@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TrainerRouteImport } from './routes/trainer'
 import { Route as StormRouteImport } from './routes/storm'
 import { Route as RushRouteImport } from './routes/rush'
 import { Route as PuzzlesRouteImport } from './routes/puzzles'
@@ -20,7 +21,14 @@ import { Route as GuessRouteImport } from './routes/guess'
 import { Route as EditorRouteImport } from './routes/editor'
 import { Route as CoordinateRouteImport } from './routes/coordinate'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TrainerVisionRouteImport } from './routes/trainer.vision'
+import { Route as TrainerOpeningRouteImport } from './routes/trainer.opening'
 
+const TrainerRoute = TrainerRouteImport.update({
+  id: '/trainer',
+  path: '/trainer',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StormRoute = StormRouteImport.update({
   id: '/storm',
   path: '/storm',
@@ -76,6 +84,16 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TrainerVisionRoute = TrainerVisionRouteImport.update({
+  id: '/vision',
+  path: '/vision',
+  getParentRoute: () => TrainerRoute,
+} as any)
+const TrainerOpeningRoute = TrainerOpeningRouteImport.update({
+  id: '/opening',
+  path: '/opening',
+  getParentRoute: () => TrainerRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -89,6 +107,9 @@ export interface FileRoutesByFullPath {
   '/puzzles': typeof PuzzlesRoute
   '/rush': typeof RushRoute
   '/storm': typeof StormRoute
+  '/trainer': typeof TrainerRouteWithChildren
+  '/trainer/opening': typeof TrainerOpeningRoute
+  '/trainer/vision': typeof TrainerVisionRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -102,6 +123,9 @@ export interface FileRoutesByTo {
   '/puzzles': typeof PuzzlesRoute
   '/rush': typeof RushRoute
   '/storm': typeof StormRoute
+  '/trainer': typeof TrainerRouteWithChildren
+  '/trainer/opening': typeof TrainerOpeningRoute
+  '/trainer/vision': typeof TrainerVisionRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -116,6 +140,9 @@ export interface FileRoutesById {
   '/puzzles': typeof PuzzlesRoute
   '/rush': typeof RushRoute
   '/storm': typeof StormRoute
+  '/trainer': typeof TrainerRouteWithChildren
+  '/trainer/opening': typeof TrainerOpeningRoute
+  '/trainer/vision': typeof TrainerVisionRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -131,6 +158,9 @@ export interface FileRouteTypes {
     | '/puzzles'
     | '/rush'
     | '/storm'
+    | '/trainer'
+    | '/trainer/opening'
+    | '/trainer/vision'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -144,6 +174,9 @@ export interface FileRouteTypes {
     | '/puzzles'
     | '/rush'
     | '/storm'
+    | '/trainer'
+    | '/trainer/opening'
+    | '/trainer/vision'
   id:
     | '__root__'
     | '/'
@@ -157,6 +190,9 @@ export interface FileRouteTypes {
     | '/puzzles'
     | '/rush'
     | '/storm'
+    | '/trainer'
+    | '/trainer/opening'
+    | '/trainer/vision'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -171,10 +207,18 @@ export interface RootRouteChildren {
   PuzzlesRoute: typeof PuzzlesRoute
   RushRoute: typeof RushRoute
   StormRoute: typeof StormRoute
+  TrainerRoute: typeof TrainerRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/trainer': {
+      id: '/trainer'
+      path: '/trainer'
+      fullPath: '/trainer'
+      preLoaderRoute: typeof TrainerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/storm': {
       id: '/storm'
       path: '/storm'
@@ -252,8 +296,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/trainer/vision': {
+      id: '/trainer/vision'
+      path: '/vision'
+      fullPath: '/trainer/vision'
+      preLoaderRoute: typeof TrainerVisionRouteImport
+      parentRoute: typeof TrainerRoute
+    }
+    '/trainer/opening': {
+      id: '/trainer/opening'
+      path: '/opening'
+      fullPath: '/trainer/opening'
+      preLoaderRoute: typeof TrainerOpeningRouteImport
+      parentRoute: typeof TrainerRoute
+    }
   }
 }
+
+interface TrainerRouteChildren {
+  TrainerOpeningRoute: typeof TrainerOpeningRoute
+  TrainerVisionRoute: typeof TrainerVisionRoute
+}
+
+const TrainerRouteChildren: TrainerRouteChildren = {
+  TrainerOpeningRoute: TrainerOpeningRoute,
+  TrainerVisionRoute: TrainerVisionRoute,
+}
+
+const TrainerRouteWithChildren =
+  TrainerRoute._addFileChildren(TrainerRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -267,6 +338,7 @@ const rootRouteChildren: RootRouteChildren = {
   PuzzlesRoute: PuzzlesRoute,
   RushRoute: RushRoute,
   StormRoute: StormRoute,
+  TrainerRoute: TrainerRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -337,7 +337,7 @@ export function LessonRunner({ lesson }: { lesson: Lesson }) {
                   ? "Nicely done."
                   : "You got there — try again for a cleaner run."}
             </p>
-            <div className="mt-4 flex gap-2">
+            <div className="mt-4 flex flex-wrap gap-2">
               <button
                 onClick={restart}
                 className="inline-flex h-11 items-center gap-1.5 rounded-md border bg-background px-3 text-xs font-medium transition-colors hover:bg-secondary"
@@ -345,6 +345,13 @@ export function LessonRunner({ lesson }: { lesson: Lesson }) {
                 <RotateCcw className="h-3.5 w-3.5" />
                 Try again
               </button>
+              <Link
+                to="/trainer"
+                className="inline-flex h-11 items-center gap-1.5 rounded-md border border-primary/40 bg-primary/10 px-3 text-xs font-medium text-primary transition-colors hover:bg-primary/15"
+              >
+                <Target className="h-3.5 w-3.5" />
+                Drill this in Trainer
+              </Link>
               <Link
                 to="/learn"
                 className="inline-flex h-11 items-center gap-1.5 rounded-md bg-primary px-3 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"

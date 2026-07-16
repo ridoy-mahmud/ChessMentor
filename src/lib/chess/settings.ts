@@ -14,6 +14,7 @@ export type BoardTheme =
   | "sandstone"
   | "ocean";
 export type PieceSet =
+  | "classic3d"
   | "minimal"
   | "classic"
   | "neo"
@@ -41,18 +42,18 @@ const DEFAULTS: Settings = {
   showCoords: true,
   boardOrientation: "white",
   boardTheme: "warm",
-  pieceSet: "minimal",
+  pieceSet: "classic3d",
   socratic: false,
   analyticsMode: "learning",
   showThreatRadar: true,
   reducedMotion: false,
 };
 
-const KEY = "chessmentor:settings:v3";
+const KEY = "chessmentor:settings:v4";
 const ALL_THEMES: BoardTheme[] = [
   "warm", "slate", "emerald", "walnut", "glass", "coral", "midnight", "classic", "sandstone", "ocean",
 ];
-const ALL_PIECES: PieceSet[] = ["minimal", "classic", "neo", "wood", "marble", "accessibility"];
+const ALL_PIECES: PieceSet[] = ["classic3d", "minimal", "classic", "neo", "wood", "marble", "accessibility"];
 
 let state: Settings = { ...DEFAULTS };
 const listeners = new Set<() => void>();
@@ -166,6 +167,7 @@ export const BOARD_THEME_META: Record<BoardTheme, { label: string; blurb: string
 };
 
 export const PIECE_SET_META: Record<PieceSet, { label: string; blurb: string }> = {
+  classic3d: { label: "Classic 3D", blurb: "Chess.com-style rounded pieces with soft shading and contact shadow." },
   minimal: { label: "Minimal Line", blurb: "Clean modern outlines." },
   classic: { label: "Classic Staunton", blurb: "Traditional silhouette." },
   neo: { label: "Neo", blurb: "Bold geometric modern." },

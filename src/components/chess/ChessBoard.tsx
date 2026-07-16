@@ -2,6 +2,7 @@ import { Chessboard } from "react-chessboard";
 import type { Square } from "chess.js";
 import { useMemo, useState } from "react";
 import { useSettings } from "@/lib/chess/settings";
+import { BoardQuickSwitch } from "./BoardQuickSwitch";
 import type { useChessGame } from "@/lib/chess/useChessGame";
 
 type Game = ReturnType<typeof useChessGame>;
@@ -122,6 +123,9 @@ export function ChessBoard({
 
   return (
     <div className="mx-auto w-full max-w-[min(80vh,640px)]">
+      <div className="mb-2 flex justify-end">
+        <BoardQuickSwitch />
+      </div>
       <div className="overflow-hidden rounded-xl border bg-card shadow-e2">
         <Chessboard
           options={{

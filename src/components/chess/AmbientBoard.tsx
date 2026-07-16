@@ -69,7 +69,8 @@ export function AmbientBoard({ tilt = true }: { tilt?: boolean }) {
       }}
       aria-hidden="true"
     >
-      <div className="absolute inset-0 rounded-2xl opacity-70 mix-blend-multiply dark:mix-blend-normal dark:opacity-50">
+      <div className="hero-glow" />
+      <div className="relative z-10 rounded-2xl opacity-90 dark:opacity-80">
         <Chessboard
           options={{
             id: "ambient-board",
@@ -82,7 +83,7 @@ export function AmbientBoard({ tilt = true }: { tilt?: boolean }) {
           }}
         />
       </div>
-      <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-tr from-background/60 via-transparent to-background/30" />
+      <div className="pointer-events-none absolute inset-0 z-20 rounded-2xl bg-gradient-to-tr from-background/40 via-transparent to-background/20" />
     </div>
   );
 }

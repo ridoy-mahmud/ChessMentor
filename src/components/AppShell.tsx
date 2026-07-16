@@ -15,7 +15,7 @@ type NavItem = {
     | "/play"
     | "/puzzles"
     | "/rush"
-    | "/coordinate"
+    | "/trainer"
     | "/practice"
     | "/guess"
     | "/profile";
@@ -27,9 +27,9 @@ const NAV: NavItem[] = [
   { to: "/", label: "Home", exact: true },
   { to: "/learn", label: "Learn" },
   { to: "/play", label: "Play" },
+  { to: "/trainer", label: "Trainer" },
   { to: "/puzzles", label: "Puzzles" },
   { to: "/rush", label: "Rush" },
-  { to: "/coordinate", label: "Trainer" },
   { to: "/practice", label: "Practice" },
   { to: "/profile", label: "Profile" },
 ];

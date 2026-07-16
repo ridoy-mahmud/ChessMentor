@@ -88,8 +88,8 @@ function LearnIndex() {
             The ChessMentor curriculum
           </h1>
           <p className="mt-1 max-w-xl text-sm text-muted-foreground">
-            Interactive drills with instant feedback, a live evaluation bar,
-            and a "Show me" hint that draws the correct move on the board.
+            An illustrated path through fundamentals, tactics, and endgames —
+            mastery ring fills as you earn stars.
           </p>
         </div>
         <div className="text-right">
@@ -103,12 +103,12 @@ function LearnIndex() {
         </div>
       </header>
 
-      <div className="space-y-10">
+      <div className="space-y-12">
         {CATEGORIES.map((cat) => {
           const lessons = LESSONS.filter((l) => l.category === cat.key);
           return (
             <section key={cat.key}>
-              <div className="mb-4 flex items-baseline justify-between border-b pb-2">
+              <div className="mb-6 flex items-baseline justify-between border-b pb-2">
                 <div>
                   <h2 className="text-lg font-semibold tracking-tight">
                     {cat.title}
@@ -122,16 +122,11 @@ function LearnIndex() {
                   {lessons.length}
                 </span>
               </div>
-              <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {lessons.map((lesson) => (
-                  <LessonCard
-                    key={lesson.id}
-                    lesson={lesson}
-                    unlocked={isLessonUnlocked(lesson, completedIds)}
-                    progress={progress[lesson.id]}
-                  />
-                ))}
-              </ul>
+              <LessonTrail
+                lessons={lessons}
+                completedIds={completedIds}
+                progress={progress}
+              />
             </section>
           );
         })}
@@ -140,61 +135,182 @@ function LearnIndex() {
   );
 }
 
-function LessonCard({
+const PER_ROW = 3;
+
+function LessonTrail({
+  lessons,
+  completedIds,
+  progress,
+}: {
+  lessons: Lesson[];
+  completedIds: Set<string>;
+  progress: ReturnType<typeof useProgress>;
+}) {
+  const navigate = useNavigate();
+  const rows = Math.ceil(lessons.length / PER_ROW);
+  const cellH = 150;
+  const height = rows * cellH + 40;
+  return (
+    <div className="relative">
+      <svg
+        className="pointer-events-none absolute inset-0 h-full w-full"
+        viewBox={`0 0 900 ${height}`}
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        {lessons.slice(0, -1).map((_, i) => {
+          const a = nodeCenter(i, cellH);
+          const b = nodeCenter(i + 1, cellH);
+          const mx = (a.x + b.x) / 2;
+          const my = (a.y + b.y) / 2 + 30;
+          return (
+            <path
+              key={i}
+              d={`M ${a.x} ${a.y} Q ${mx} ${my} ${b.x} ${b.y}`}
+              className="lesson-path-line"
+            />
+          );
+        })}
+      </svg>
+      <ul
+        className="relative grid gap-4"
+        style={{ gridTemplateColumns: `repeat(${PER_ROW}, minmax(0, 1fr))` }}
+      >
+        {lessons.map((lesson, i) => {
+          const unlocked = isLessonUnlocked(lesson, completedIds);
+          const p = progress[lesson.id];
+          const zig = Math.floor(i / PER_ROW) % 2 === 1;
+          const orderInRow = zig ? PER_ROW - 1 - (i % PER_ROW) : i % PER_ROW;
+          return (
+            <li key={lesson.id} style={{ gridColumn: orderInRow + 1 }}>
+              <LessonNode
+                lesson={lesson}
+                unlocked={unlocked}
+                progress={p}
+                onOpen={() =>
+                  navigate({ to: "/learn", search: { lesson: lesson.id } })
+                }
+              />
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
+
+function nodeCenter(i: number, cellH: number) {
+  const row = Math.floor(i / PER_ROW);
+  const zig = row % 2 === 1;
+  const col = zig ? PER_ROW - 1 - (i % PER_ROW) : i % PER_ROW;
+  const x = (col + 0.5) * (900 / PER_ROW);
+  const y = row * cellH + 75;
+  return { x, y };
+}
+
+function LessonNode({
   lesson,
   unlocked,
   progress,
+  onOpen,
 }: {
   lesson: Lesson;
   unlocked: boolean;
   progress?: { completed: boolean; stars: 0 | 1 | 2 | 3 };
+  onOpen: () => void;
 }) {
-  const navigate = useNavigate();
   const stars = progress?.stars ?? 0;
   const done = progress?.completed;
+  const mastered = stars === 3;
   if (!unlocked) {
     return (
-      <li className="rounded-xl border border-dashed bg-card/40 p-4 opacity-60">
-        <div className="mb-2 flex items-center gap-1.5 text-xs text-muted-foreground">
-          <Lock className="h-3.5 w-3.5" />
-          Locked
+      <div className="app-card flex items-start gap-3 opacity-60">
+        <RingIndicator stars={0} locked />
+        <div className="min-w-0">
+          <div className="mb-1 flex items-center gap-1.5 text-xs text-muted-foreground">
+            <Lock className="h-3.5 w-3.5" /> Locked
+          </div>
+          <div className="truncate text-sm font-medium">{lesson.title}</div>
+          <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+            {lesson.blurb}
+          </p>
         </div>
-        <div className="text-sm font-medium">{lesson.title}</div>
-        <p className="mt-1 text-xs text-muted-foreground">{lesson.blurb}</p>
-      </li>
+      </div>
     );
   }
   return (
-    <li>
-      <button
-        onClick={() =>
-          navigate({ to: "/learn", search: { lesson: lesson.id } })
-        }
-        className="group block w-full rounded-xl border bg-card p-4 text-left transition-colors hover:border-primary/40 hover:bg-accent/40"
-      >
-        <div className="mb-2 flex items-center justify-between text-xs">
-          <span className="font-data uppercase tracking-wide text-muted-foreground">
-            {lesson.steps.length} step{lesson.steps.length > 1 ? "s" : ""}
-          </span>
-          <span className="flex items-center gap-0.5">
-            {done && <Check className="mr-1 h-3.5 w-3.5 text-primary" />}
-            {[1, 2, 3].map((n) => (
-              <Star
-                key={n}
-                className={`h-3.5 w-3.5 ${
-                  stars >= n
-                    ? "fill-primary text-primary"
-                    : "text-muted-foreground/40"
-                }`}
-              />
-            ))}
-          </span>
+    <button
+      onClick={onOpen}
+      className={`app-card group block w-full text-left ${
+        mastered ? "lesson-node-mastered" : ""
+      }`}
+    >
+      <div className="flex items-start gap-3">
+        <RingIndicator stars={stars} />
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center justify-between text-xs">
+            <span className="font-data uppercase tracking-wide text-muted-foreground">
+              {lesson.steps.length} step{lesson.steps.length > 1 ? "s" : ""}
+            </span>
+            {done && <Check className="h-3.5 w-3.5 text-primary" />}
+          </div>
+          <div className="mt-1 text-sm font-semibold group-hover:text-primary">
+            {lesson.title}
+          </div>
+          <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+            {lesson.blurb}
+          </p>
         </div>
-        <div className="text-sm font-semibold group-hover:text-primary">
-          {lesson.title}
-        </div>
-        <p className="mt-1 text-xs text-muted-foreground">{lesson.blurb}</p>
-      </button>
-    </li>
+      </div>
+    </button>
+  );
+}
+
+function RingIndicator({
+  stars,
+  locked = false,
+}: {
+  stars: number;
+  locked?: boolean;
+}) {
+  const pct = locked ? 0 : (stars / 3) * 100;
+  const circumference = 2 * Math.PI * 18;
+  const dash = (pct / 100) * circumference;
+  return (
+    <div className="relative grid h-11 w-11 shrink-0 place-items-center">
+      <svg className="absolute inset-0" viewBox="0 0 44 44">
+        <circle
+          cx="22"
+          cy="22"
+          r="18"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3"
+          className="text-muted-foreground/20"
+        />
+        <circle
+          cx="22"
+          cy="22"
+          r="18"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3"
+          strokeLinecap="round"
+          className="text-primary transition-all"
+          strokeDasharray={`${dash} ${circumference}`}
+          transform="rotate(-90 22 22)"
+        />
+      </svg>
+      <div className="flex items-center gap-0.5">
+        {[1, 2, 3].map((n) => (
+          <Star
+            key={n}
+            className={`h-2.5 w-2.5 ${
+              stars >= n ? "fill-primary text-primary" : "text-muted-foreground/40"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
