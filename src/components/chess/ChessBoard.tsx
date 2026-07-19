@@ -49,8 +49,8 @@ export function ChessBoard({
 
     // Last-move highlight
     if (game.lastMove) {
-      styles[game.lastMove.from] = { background: "var(--color-board-lastmove)" };
-      styles[game.lastMove.to] = { background: "var(--color-board-lastmove)" };
+      styles[game.lastMove.from] = { background: "var(--board-lastmove)" };
+      styles[game.lastMove.to] = { background: "var(--board-lastmove)" };
     }
 
     // External highlights (hanging pieces, etc.)
@@ -74,7 +74,7 @@ export function ChessBoard({
       if (ksq) {
         styles[ksq] = {
           background:
-            "radial-gradient(circle, var(--color-board-check) 0%, transparent 75%)",
+            "radial-gradient(circle, var(--board-check) 0%, transparent 75%)",
         };
       }
     } else if (game.status.kind === "checkmate") {
@@ -83,7 +83,7 @@ export function ChessBoard({
       if (ksq) {
         styles[ksq] = {
           background:
-            "radial-gradient(circle, var(--color-board-check) 0%, transparent 75%)",
+            "radial-gradient(circle, var(--board-check) 0%, transparent 75%)",
         };
       }
     }
@@ -100,14 +100,14 @@ export function ChessBoard({
     if (selected) {
       styles[selected] = {
         ...styles[selected],
-        background: "var(--color-board-highlight)",
+        background: "var(--board-highlight)",
       };
       for (const t of targets) {
         styles[t.to] = {
           ...styles[t.to],
           background: t.capture
-            ? "radial-gradient(circle, transparent 55%, var(--color-board-highlight) 56%, var(--color-board-highlight) 68%, transparent 69%)"
-            : "radial-gradient(circle, var(--color-board-highlight) 22%, transparent 24%)",
+            ? "radial-gradient(circle, transparent 55%, var(--board-highlight) 56%, var(--board-highlight) 68%, transparent 69%)"
+            : "radial-gradient(circle, var(--board-highlight) 22%, transparent 24%)",
         };
       }
     }
@@ -140,17 +140,17 @@ export function ChessBoard({
               endSquare: a.to,
               color: a.color ?? "rgba(15, 118, 110, 0.85)",
             })),
-            lightSquareStyle: { backgroundColor: "var(--color-board-light)" },
-            darkSquareStyle: { backgroundColor: "var(--color-board-dark)" },
+            lightSquareStyle: { backgroundColor: "var(--board-light)" },
+            darkSquareStyle: { backgroundColor: "var(--board-dark)" },
             squareStyles,
             darkSquareNotationStyle: {
-              color: "var(--color-board-light)",
+              color: "var(--board-light)",
               fontFamily: "var(--font-mono)",
               fontSize: "10px",
               opacity: 0.7,
             },
             lightSquareNotationStyle: {
-              color: "var(--color-board-dark)",
+              color: "var(--board-dark)",
               fontFamily: "var(--font-mono)",
               fontSize: "10px",
               opacity: 0.7,

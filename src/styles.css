@@ -159,6 +159,13 @@
 }
 
 /* Alternate board themes — LIGHT MODE values. */
+.board-theme-chesscom {
+  --board-light: #EBECD0;          /* iconic cream */
+  --board-dark: #779556;            /* iconic green */
+  --board-highlight: rgba(255, 255, 51, 0.55);
+  --board-lastmove: rgba(255, 255, 51, 0.50);
+  --board-check: rgba(220, 40, 40, 0.55);
+}
 .board-theme-slate {
   --board-light: oklch(0.93 0.006 240);
   --board-dark: oklch(0.55 0.03 250);
@@ -204,6 +211,10 @@
   --board-light: oklch(0.74 0.018 85);
   --board-dark: oklch(0.42 0.018 155);
 }
+.dark.board-theme-chesscom, .dark .board-theme-chesscom {
+  --board-light: #B8B98A;
+  --board-dark: #4E6B3A;
+}
 .dark.board-theme-slate, .dark .board-theme-slate {
   --board-light: oklch(0.72 0.015 240);
   --board-dark: oklch(0.4 0.028 250);
@@ -244,9 +255,15 @@
 /* Piece-set styling. Applies filters to react-chessboard piece <img>s. */
 .pieces-minimal [data-square] img { filter: none; }
 
-/* Phase 17 default — "Classic 3D": chess.com-inspired treatment.
-   Bumps contrast + adds a soft internal shading via drop-shadow stack
-   and a subtle contact shadow beneath the piece for volume. */
+/* Chess.com Classic — crisp, high-contrast silhouettes with a soft
+   contact shadow. Default piece set. */
+.pieces-chesscom [data-square] img {
+  filter:
+    contrast(1.05) saturate(1.02)
+    drop-shadow(0 1px 1px rgba(0, 0, 0, 0.28))
+    drop-shadow(0 0 0.4px rgba(0, 0, 0, 0.5));
+}
+
 .pieces-classic3d [data-square] img {
   filter:
     contrast(1.08) saturate(1.05)
@@ -267,6 +284,7 @@
    black pieces (light rim outline) separate cleanly from any dark
    square color across every board theme. Overrides the light-mode
    piece-set filter in dark mode. */
+.dark .pieces-chesscom [data-square] img,
 .dark .pieces-minimal [data-square] img,
 .dark .pieces-classic [data-square] img,
 .dark .pieces-neo [data-square] img,

@@ -27,11 +27,11 @@ export function EvalBar({ evaluation, loading, orientation = "white" }: Props) {
   return (
     <div className="flex h-full flex-col items-center gap-2">
       <div
-        className="relative w-6 flex-1 overflow-hidden rounded-sm border bg-[color:var(--color-board-dark)]"
+        className="relative w-6 flex-1 overflow-hidden rounded-sm border bg-[color:var(--board-dark)]"
         aria-label="Evaluation bar"
       >
         <div
-          className="absolute inset-x-0 top-0 bg-[color:var(--color-board-light)] transition-[height] duration-500 ease-out"
+          className="absolute inset-x-0 top-0 bg-[color:var(--board-light)] transition-[height] duration-500 ease-out"
           style={{ height: `${topPct}%` }}
         />
         {loading && (

@@ -78,8 +78,8 @@ export function AmbientBoard({ tilt = true }: { tilt?: boolean }) {
             allowDragging: false,
             showNotation: false,
             animationDurationInMs: 900,
-            lightSquareStyle: { backgroundColor: "var(--color-board-light)" },
-            darkSquareStyle: { backgroundColor: "var(--color-board-dark)" },
+            lightSquareStyle: { backgroundColor: "var(--board-light)" },
+            darkSquareStyle: { backgroundColor: "var(--board-dark)" },
           }}
         />
       </div>

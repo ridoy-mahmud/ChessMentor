@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { ChessBoard, type BoardArrow, type SquareHighlight } from "@/components/chess/ChessBoard";
+import { ConceptIntro } from "@/components/chess/ConceptIntro";
 import { EvalBar } from "@/components/chess/EvalBar";
 import { useChessGame } from "@/lib/chess/useChessGame";
 import { analyze, preloadEngine, type Evaluation } from "@/lib/chess/engine";
@@ -45,6 +46,7 @@ function squareOfSan(fen: string, san: string): string | null {
 export function LessonRunner({ lesson }: { lesson: Lesson }) {
   const game = useChessGame();
   const { boardOrientation, socratic } = useSettings();
+  const [showIntro, setShowIntro] = useState<boolean>(!!lesson.intro);
   const [stepIndex, setStepIndex] = useState(0);
   const [feedback, setFeedback] = useState<Feedback>({ kind: "idle" });
   const [hintTier, setHintTier] = useState<0 | 1 | 2 | 3>(0);
@@ -56,6 +58,11 @@ export function LessonRunner({ lesson }: { lesson: Lesson }) {
   const [watchIndex, setWatchIndex] = useState<number | null>(null);
   const [watchNarration, setWatchNarration] = useState<string>("");
   const recordedRef = useRef(false);
+
+  // Reset intro visibility when navigating between lessons.
+  useEffect(() => {
+    setShowIntro(!!lesson.intro);
+  }, [lesson.id, lesson.intro]);
 
   const step = lesson.steps[stepIndex];
 
@@ -216,6 +223,12 @@ export function LessonRunner({ lesson }: { lesson: Lesson }) {
   const socraticPrompt = socratic && step && feedback.kind === "idle"
     ? "Before you move: what does the position ask for? Look at threats, active pieces, and undefended squares."
     : null;
+
+  if (showIntro && lesson.intro) {
+    return (
+      <ConceptIntro intro={lesson.intro} onDone={() => setShowIntro(false)} />
+    );
+  }
 
   return (
     <div className="grid gap-6 lg:grid-cols-[24px_minmax(0,1fr)_360px]">

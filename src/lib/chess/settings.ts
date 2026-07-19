@@ -3,6 +3,7 @@ import { setMuted } from "./sounds";
 
 export type Theme = "light" | "dark";
 export type BoardTheme =
+  | "chesscom"
   | "warm"
   | "slate"
   | "emerald"
@@ -14,6 +15,7 @@ export type BoardTheme =
   | "sandstone"
   | "ocean";
 export type PieceSet =
+  | "chesscom"
   | "classic3d"
   | "minimal"
   | "classic"
@@ -41,19 +43,19 @@ const DEFAULTS: Settings = {
   muted: false,
   showCoords: true,
   boardOrientation: "white",
-  boardTheme: "warm",
-  pieceSet: "classic3d",
+  boardTheme: "chesscom",
+  pieceSet: "chesscom",
   socratic: false,
   analyticsMode: "learning",
   showThreatRadar: true,
   reducedMotion: false,
 };
 
-const KEY = "chessmentor:settings:v4";
+const KEY = "chessmentor:settings:v5";
 const ALL_THEMES: BoardTheme[] = [
-  "warm", "slate", "emerald", "walnut", "glass", "coral", "midnight", "classic", "sandstone", "ocean",
+  "chesscom", "warm", "slate", "emerald", "walnut", "glass", "coral", "midnight", "classic", "sandstone", "ocean",
 ];
-const ALL_PIECES: PieceSet[] = ["classic3d", "minimal", "classic", "neo", "wood", "marble", "accessibility"];
+const ALL_PIECES: PieceSet[] = ["chesscom", "classic3d", "minimal", "classic", "neo", "wood", "marble", "accessibility"];
 
 let state: Settings = { ...DEFAULTS };
 const listeners = new Set<() => void>();
@@ -154,6 +156,7 @@ export function useSettings(): Settings {
 }
 
 export const BOARD_THEME_META: Record<BoardTheme, { label: string; blurb: string }> = {
+  chesscom: { label: "Chess.com Green", blurb: "The iconic green & cream board." },
   warm: { label: "Walnut Warm", blurb: "Default warm-neutral pair." },
   slate: { label: "Slate", blurb: "Cool blue-grey." },
   emerald: { label: "Emerald", blurb: "Muted green." },
@@ -167,7 +170,8 @@ export const BOARD_THEME_META: Record<BoardTheme, { label: string; blurb: string
 };
 
 export const PIECE_SET_META: Record<PieceSet, { label: string; blurb: string }> = {
-  classic3d: { label: "Classic 3D", blurb: "Chess.com-style rounded pieces with soft shading and contact shadow." },
+  chesscom: { label: "Chess.com Classic", blurb: "The familiar chess.com piece silhouette." },
+  classic3d: { label: "Classic 3D", blurb: "Rounded pieces with soft shading and contact shadow." },
   minimal: { label: "Minimal Line", blurb: "Clean modern outlines." },
   classic: { label: "Classic Staunton", blurb: "Traditional silhouette." },
   neo: { label: "Neo", blurb: "Bold geometric modern." },

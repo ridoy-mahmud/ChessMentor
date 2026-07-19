@@ -129,8 +129,8 @@ function CoordPage() {
                   allowDragging: false,
                   showNotation: showCoords,
                   animationDurationInMs: 0,
-                  lightSquareStyle: { backgroundColor: "var(--color-board-light)" },
-                  darkSquareStyle: { backgroundColor: "var(--color-board-dark)" },
+                  lightSquareStyle: { backgroundColor: "var(--board-light)" },
+                  darkSquareStyle: { backgroundColor: "var(--board-dark)" },
                   squareStyles: flash
                     ? {
                         [flash.sq]: {

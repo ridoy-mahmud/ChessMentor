@@ -54,8 +54,8 @@ function EditorPage() {
                 position: fen,
                 showNotation: showCoords,
                 animationDurationInMs: 0,
-                lightSquareStyle: { backgroundColor: "var(--color-board-light)" },
-                darkSquareStyle: { backgroundColor: "var(--color-board-dark)" },
+                lightSquareStyle: { backgroundColor: "var(--board-light)" },
+                darkSquareStyle: { backgroundColor: "var(--board-dark)" },
                 onSquareClick: ({ square }) => {
                   const sq = square as string;
                   if (selected) {

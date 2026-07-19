@@ -733,10 +733,10 @@ function MiniBoardPreview({ theme }: { theme: string }) {
   // Render 4 squares showing the light/dark contrast for the theme.
   return (
     <div className={`board-theme-${theme} grid grid-cols-2 overflow-hidden rounded border`}>
-      <div className="h-6" style={{ background: "var(--color-board-light)" }} />
-      <div className="h-6" style={{ background: "var(--color-board-dark)" }} />
-      <div className="h-6" style={{ background: "var(--color-board-dark)" }} />
-      <div className="h-6" style={{ background: "var(--color-board-light)" }} />
+      <div className="h-6" style={{ background: "var(--board-light)" }} />
+      <div className="h-6" style={{ background: "var(--board-dark)" }} />
+      <div className="h-6" style={{ background: "var(--board-dark)" }} />
+      <div className="h-6" style={{ background: "var(--board-light)" }} />
     </div>
   );
 }

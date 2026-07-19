@@ -9,12 +9,25 @@ export type LessonStep = {
   explanation?: string;
 };
 
+/**
+ * Short animated "concept intro" that plays before the first drill of a
+ * lesson. Renders on a mini-board: starts from `fen`, then plays each
+ * move in `moves` (SAN) with the matching caption.
+ */
+export type LessonIntro = {
+  headline: string;
+  tagline: string;
+  fen: string;
+  moves: { san: string; caption: string }[];
+};
+
 export type Lesson = {
   id: string;
   title: string;
   category: LessonCategory;
   blurb: string;
   requires?: string[];
+  intro?: LessonIntro;
   steps: LessonStep[];
 };
 
@@ -40,15 +53,28 @@ export const CATEGORIES: {
   },
 ];
 
+const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
 export const LESSONS: Lesson[] = [
   {
     id: "center-control",
     title: "Control the center",
     category: "fundamentals",
     blurb: "Claim central squares with your first move.",
+    intro: {
+      headline: "The center is power",
+      tagline: "Pieces in the middle reach more squares — start there.",
+      fen: START,
+      moves: [
+        { san: "e4", caption: "White claims e4 — a central pawn." },
+        { san: "e5", caption: "Black mirrors — both fight for the middle." },
+        { san: "Nf3", caption: "Knight develops toward the center." },
+        { san: "Nc6", caption: "Black defends and develops too." },
+      ],
+    },
     steps: [
       {
-        fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        fen: START,
         prompt: "White to move. Occupy the center with a pawn.",
         bestMoves: ["e4", "d4"],
         hint: "Push a central pawn two squares to claim e4 or d4.",
@@ -69,9 +95,23 @@ export const LESSONS: Lesson[] = [
     category: "fundamentals",
     blurb: "Get your king to safety early.",
     requires: ["center-control"],
+    intro: {
+      headline: "King safety first",
+      tagline: "Develop your minor pieces, then tuck the king behind pawns.",
+      fen: START,
+      moves: [
+        { san: "e4", caption: "Central pawn." },
+        { san: "e5", caption: "Symmetric response." },
+        { san: "Nf3", caption: "Knight out." },
+        { san: "Nc6", caption: "Knight out." },
+        { san: "Bc4", caption: "Bishop developed — aiming at f7." },
+        { san: "Bc5", caption: "Bishop developed." },
+        { san: "O-O", caption: "Castle! King safe, rook activated." },
+      ],
+    },
     steps: [
       {
-        fen: "rnbqk2r/pppp1ppp/3b1n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+        fen: "rnbqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
         prompt: "You've developed two pieces. Tuck the king away.",
         bestMoves: ["O-O"],
         hint: "Castle kingside — king to g1, rook to f1.",
@@ -85,14 +125,23 @@ export const LESSONS: Lesson[] = [
     title: "Take what's free",
     category: "tactics",
     blurb: "Spot undefended pieces and capture them.",
+    intro: {
+      headline: "Free material wins games",
+      tagline: "Before every move, ask: is anything hanging?",
+      fen: "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 4 4",
+      moves: [
+        { san: "Ng5", caption: "White threatens Nxf7 — a hanging point." },
+      ],
+    },
     steps: [
       {
-        fen: "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+        // Black knight on d4 is undefended; White to move can take it with Nxd4.
+        fen: "r1bqkb1r/pppp1ppp/5n2/4p3/3nP3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 0 5",
         prompt: "Is anything hanging? White to move.",
-        bestMoves: ["Nxe5"],
-        hint: "The e5 pawn is defended only once and attacked twice.",
+        bestMoves: ["Nxd4"],
+        hint: "The black knight on d4 has no defenders.",
         explanation:
-          "Nxe5 wins the pawn — Black's knight defends it but White's knight attacks it and the pawn is only worth 1.",
+          "Nxd4 wins a whole knight — nothing was defending it.",
       },
     ],
   },
@@ -102,6 +151,14 @@ export const LESSONS: Lesson[] = [
     category: "tactics",
     blurb: "Attack two pieces with one knight jump.",
     requires: ["capture-hanging"],
+    intro: {
+      headline: "One knight, two targets",
+      tagline: "A knight on the right square hits king and queen at once.",
+      fen: "r3k2r/ppp2ppp/2n1b3/3q4/3P4/2N2N2/PPP2PPP/R2QK2R w KQkq - 0 1",
+      moves: [
+        { san: "Nxd5", caption: "Knight lands with tempo — queen falls." },
+      ],
+    },
     steps: [
       {
         fen: "r3k2r/ppp2ppp/2n1b3/3q4/3P4/2N2N2/PPP2PPP/R2QK2R w KQkq - 0 1",
@@ -111,12 +168,6 @@ export const LESSONS: Lesson[] = [
         explanation:
           "Nxd5 removes Black's queen — nothing defends it and the knight is safe.",
       },
-      {
-        fen: "r1bqk2r/pppp1ppp/2n2n2/4p3/1bB1P3/2N2N2/PPPP1PPP/R1BQ1RK1 b kq - 5 5",
-        prompt: "Black to move. Find the forking square for the knight.",
-        bestMoves: ["Nd4"],
-        hint: "A knight jump to d4 attacks two undefended pieces.",
-      },
     ],
   },
   {
@@ -125,6 +176,12 @@ export const LESSONS: Lesson[] = [
     category: "tactics",
     blurb: "Deliver checkmate with a single move.",
     requires: ["knight-fork"],
+    intro: {
+      headline: "Back-rank mates",
+      tagline: "A king walled in by its own pawns is a mating pattern.",
+      fen: "6k1/5ppp/8/8/8/8/5PPP/4R1K1 w - - 0 1",
+      moves: [{ san: "Re8#", caption: "Rook slides in — no escape." }],
+    },
     steps: [
       {
         fen: "6k1/5ppp/8/8/8/8/5PPP/4R1K1 w - - 0 1",
@@ -146,6 +203,12 @@ export const LESSONS: Lesson[] = [
     title: "King & queen mate",
     category: "endgames",
     blurb: "Corral the lone king with king and queen.",
+    intro: {
+      headline: "Walk the king to the edge",
+      tagline: "Your king supports the queen — together they mate.",
+      fen: "4k3/8/4K3/4Q3/8/8/8/8 w - - 0 1",
+      moves: [{ san: "Qe7#", caption: "Queen up close, protected by the king." }],
+    },
     steps: [
       {
         fen: "4k3/8/4K3/4Q3/8/8/8/8 w - - 0 1",
@@ -163,6 +226,14 @@ export const LESSONS: Lesson[] = [
     category: "endgames",
     blurb: "Use your king to outmaneuver the opponent's.",
     requires: ["king-and-queen-mate"],
+    intro: {
+      headline: "Kings that face off",
+      tagline: "Whoever *doesn't* move first controls the squares.",
+      fen: "8/8/3k4/8/3K4/8/8/8 w - - 0 1",
+      moves: [
+        { san: "Ke4", caption: "White steps up — Black must give way." },
+      ],
+    },
     steps: [
       {
         fen: "8/8/3k4/8/3K4/8/8/8 w - - 0 1",
@@ -181,6 +252,12 @@ export const LESSONS: Lesson[] = [
     category: "endgames",
     blurb: "Push the passed pawn to the eighth rank.",
     requires: ["opposition"],
+    intro: {
+      headline: "A pawn becomes a queen",
+      tagline: "Passed pawns must be pushed — new material wins.",
+      fen: "8/P7/8/8/8/8/8/4K2k w - - 0 1",
+      moves: [{ san: "a8=Q+", caption: "Promotion! A brand-new queen." }],
+    },
     steps: [
       {
         fen: "8/P7/8/8/8/8/8/4K2k w - - 0 1",
