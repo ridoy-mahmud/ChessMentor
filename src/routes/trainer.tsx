@@ -6,6 +6,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ActivitySquare,
   BookOpenCheck,
+  Dumbbell,
   Crosshair,
   Eye,
   Flame,
@@ -39,7 +40,12 @@ export const Route = createFileRoute("/trainer")({
 });
 
 const MODES: Array<{
-  to: "/practice" | "/rush" | "/coordinate" | "/trainer/opening" | "/trainer/vision";
+  to:
+    | "/puzzles"
+    | "/coordinate"
+    | "/trainer/opening"
+    | "/trainer/vision"
+    | "/trainer/practice";
   icon: typeof Target;
   title: string;
   blurb: string;
@@ -47,7 +53,7 @@ const MODES: Array<{
   category: string;
 }> = [
   {
-    to: "/practice",
+    to: "/puzzles",
     icon: Target,
     title: "Tactics Trainer",
     blurb: "Themed puzzle sets — forks, pins, discovered attacks.",
@@ -55,7 +61,7 @@ const MODES: Array<{
     category: "Pattern",
   },
   {
-    to: "/practice",
+    to: "/trainer/practice",
     icon: BookOpenCheck,
     title: "Endgame Trainer",
     blurb: "K+P vs K, opposition, rook endings — from position to result.",
@@ -85,6 +91,14 @@ const MODES: Array<{
     blurb: "Flash drills: count attackers/defenders, spot attacked pieces.",
     tier: "amber",
     category: "Speed",
+  },
+  {
+    to: "/trainer/practice",
+    icon: Dumbbell,
+    title: "Guided Practice",
+    blurb: "Untimed, theme-grouped exercises — repeat until the pattern sticks.",
+    tier: "teal",
+    category: "Guided",
   },
 ];
 

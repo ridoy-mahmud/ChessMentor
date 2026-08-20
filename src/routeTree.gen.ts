@@ -20,8 +20,10 @@ import { Route as LearnRouteImport } from './routes/learn'
 import { Route as GuessRouteImport } from './routes/guess'
 import { Route as EditorRouteImport } from './routes/editor'
 import { Route as CoordinateRouteImport } from './routes/coordinate'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TrainerVisionRouteImport } from './routes/trainer.vision'
+import { Route as TrainerPracticeRouteImport } from './routes/trainer.practice'
 import { Route as TrainerOpeningRouteImport } from './routes/trainer.opening'
 
 const TrainerRoute = TrainerRouteImport.update({
@@ -79,6 +81,11 @@ const CoordinateRoute = CoordinateRouteImport.update({
   path: '/coordinate',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -89,6 +96,11 @@ const TrainerVisionRoute = TrainerVisionRouteImport.update({
   path: '/vision',
   getParentRoute: () => TrainerRoute,
 } as any)
+const TrainerPracticeRoute = TrainerPracticeRouteImport.update({
+  id: '/practice',
+  path: '/practice',
+  getParentRoute: () => TrainerRoute,
+} as any)
 const TrainerOpeningRoute = TrainerOpeningRouteImport.update({
   id: '/opening',
   path: '/opening',
@@ -97,6 +109,7 @@ const TrainerOpeningRoute = TrainerOpeningRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/coordinate': typeof CoordinateRoute
   '/editor': typeof EditorRoute
   '/guess': typeof GuessRoute
@@ -109,10 +122,12 @@ export interface FileRoutesByFullPath {
   '/storm': typeof StormRoute
   '/trainer': typeof TrainerRouteWithChildren
   '/trainer/opening': typeof TrainerOpeningRoute
+  '/trainer/practice': typeof TrainerPracticeRoute
   '/trainer/vision': typeof TrainerVisionRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/coordinate': typeof CoordinateRoute
   '/editor': typeof EditorRoute
   '/guess': typeof GuessRoute
@@ -125,11 +140,13 @@ export interface FileRoutesByTo {
   '/storm': typeof StormRoute
   '/trainer': typeof TrainerRouteWithChildren
   '/trainer/opening': typeof TrainerOpeningRoute
+  '/trainer/practice': typeof TrainerPracticeRoute
   '/trainer/vision': typeof TrainerVisionRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/coordinate': typeof CoordinateRoute
   '/editor': typeof EditorRoute
   '/guess': typeof GuessRoute
@@ -142,12 +159,14 @@ export interface FileRoutesById {
   '/storm': typeof StormRoute
   '/trainer': typeof TrainerRouteWithChildren
   '/trainer/opening': typeof TrainerOpeningRoute
+  '/trainer/practice': typeof TrainerPracticeRoute
   '/trainer/vision': typeof TrainerVisionRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/coordinate'
     | '/editor'
     | '/guess'
@@ -160,10 +179,12 @@ export interface FileRouteTypes {
     | '/storm'
     | '/trainer'
     | '/trainer/opening'
+    | '/trainer/practice'
     | '/trainer/vision'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/coordinate'
     | '/editor'
     | '/guess'
@@ -176,10 +197,12 @@ export interface FileRouteTypes {
     | '/storm'
     | '/trainer'
     | '/trainer/opening'
+    | '/trainer/practice'
     | '/trainer/vision'
   id:
     | '__root__'
     | '/'
+    | '/auth'
     | '/coordinate'
     | '/editor'
     | '/guess'
@@ -192,11 +215,13 @@ export interface FileRouteTypes {
     | '/storm'
     | '/trainer'
     | '/trainer/opening'
+    | '/trainer/practice'
     | '/trainer/vision'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   CoordinateRoute: typeof CoordinateRoute
   EditorRoute: typeof EditorRoute
   GuessRoute: typeof GuessRoute
@@ -289,6 +314,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoordinateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -303,6 +335,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrainerVisionRouteImport
       parentRoute: typeof TrainerRoute
     }
+    '/trainer/practice': {
+      id: '/trainer/practice'
+      path: '/practice'
+      fullPath: '/trainer/practice'
+      preLoaderRoute: typeof TrainerPracticeRouteImport
+      parentRoute: typeof TrainerRoute
+    }
     '/trainer/opening': {
       id: '/trainer/opening'
       path: '/opening'
@@ -315,11 +354,13 @@ declare module '@tanstack/react-router' {
 
 interface TrainerRouteChildren {
   TrainerOpeningRoute: typeof TrainerOpeningRoute
+  TrainerPracticeRoute: typeof TrainerPracticeRoute
   TrainerVisionRoute: typeof TrainerVisionRoute
 }
 
 const TrainerRouteChildren: TrainerRouteChildren = {
   TrainerOpeningRoute: TrainerOpeningRoute,
+  TrainerPracticeRoute: TrainerPracticeRoute,
   TrainerVisionRoute: TrainerVisionRoute,
 }
 
@@ -328,6 +369,7 @@ const TrainerRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   CoordinateRoute: CoordinateRoute,
   EditorRoute: EditorRoute,
   GuessRoute: GuessRoute,

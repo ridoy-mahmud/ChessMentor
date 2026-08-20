@@ -63,7 +63,7 @@ import { recordGameStat } from "@/lib/chess/gameTrend";
 import { Chess } from "chess.js";
 
 const searchSchema = z.object({
-  bot: z.enum(["rookie", "challenger", "strategist", "tactician", "grandmaster"]).optional(),
+  bot: z.enum(["rookie", "apprentice", "challenger", "strategist", "oracle", "tactician", "grandmaster"]).optional(),
   rated: z.boolean().optional(),
 });
 
@@ -75,7 +75,7 @@ export const Route = createFileRoute("/play")({
       {
         name: "description",
         content:
-          "Play five personality bots or a friend with live move quality, accuracy, and win-probability.",
+          "Play seven personality bots or a friend with live move quality, accuracy, and win-probability.",
       },
       { property: "og:title", content: "Play — ChessMentor" },
     ],
@@ -633,7 +633,7 @@ function PlayPage() {
             {mode === "ai" && (
               <>
                 <div className="mb-1 text-xs text-muted-foreground">Opponent</div>
-                <div className="mb-3 grid grid-cols-5 gap-1">
+                <div className="mb-3 grid grid-cols-4 gap-1 sm:grid-cols-7">
                   {BOT_ORDER.map((id) => {
                     const b = BOTS[id];
                     return (
@@ -651,7 +651,7 @@ function PlayPage() {
                           width={48}
                           height={48}
                           loading="lazy"
-                          className="h-14 w-full object-cover"
+                          className="h-12 w-full bg-secondary/40 object-contain p-1"
                         />
                       </button>
                     );
@@ -881,7 +881,7 @@ function ClockRow({
             width={28}
             height={28}
             loading="lazy"
-            className={`h-7 w-7 rounded-full object-cover ${thinking ? "animate-pulse" : ""}`}
+            className={`h-7 w-7 object-contain ${thinking ? "animate-pulse" : ""}`}
           />
         ) : (
           <span

@@ -46,6 +46,21 @@ npm install
 npm run dev
 ```
 
+## Firebase Auth Setup
+
+To enable email/password and Google sign-in locally and on Vercel, set these environment variables in your local `.env` file and in your Vercel project settings:
+
+- `FIREBASE_API_KEY`
+- `FIREBASE_AUTH_DOMAIN`
+- `FIREBASE_PROJECT_ID`
+- `FIREBASE_STORAGE_BUCKET`
+- `FIREBASE_MESSAGING_SENDER_ID`
+- `FIREBASE_APP_ID`
+
+If you prefer client-prefixed vars, `VITE_FIREBASE_*` is also supported.
+
+Also make sure the deployed domain is listed in Firebase Authentication > Settings > Authorized domains, or Google sign-in will fail with an unauthorized-domain error.
+
 ## Available Scripts
 
 ```bash

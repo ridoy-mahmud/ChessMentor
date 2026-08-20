@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Moon, Sun, Volume2, VolumeX } from "lucide-react";
 import { useEffect, type ReactNode } from "react";
+import { AccountMenu } from "@/components/AccountMenu";
 import {
   initSettings,
   toggleMute,
@@ -8,15 +9,14 @@ import {
   useSettings,
 } from "@/lib/chess/settings";
 
+
 type NavItem = {
   to:
     | "/"
     | "/learn"
     | "/play"
     | "/puzzles"
-    | "/rush"
     | "/trainer"
-    | "/practice"
     | "/guess"
     | "/profile";
   label: string;
@@ -29,8 +29,6 @@ const NAV: NavItem[] = [
   { to: "/play", label: "Play" },
   { to: "/trainer", label: "Trainer" },
   { to: "/puzzles", label: "Puzzles" },
-  { to: "/rush", label: "Rush" },
-  { to: "/practice", label: "Practice" },
   { to: "/profile", label: "Profile" },
 ];
 
@@ -86,7 +84,9 @@ export function AppShell({ children }: { children: ReactNode }) {
             >
               {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </button>
+            <AccountMenu />
           </div>
+
         </div>
 
         <nav className="flex items-center gap-1 overflow-x-auto px-4 pb-2 text-sm md:hidden">

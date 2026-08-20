@@ -67,7 +67,7 @@ function ProfilePage() {
           <div className="mt-3 rounded-xl border border-amber/40 bg-amber/5 p-4 text-sm">
             <p>
               Three losses in a row — consider a{" "}
-              <Link to="/practice" className="font-medium text-primary underline">practice drill</Link>{" "}
+              <Link to="/trainer/practice" className="font-medium text-primary underline">practice drill</Link>{" "}
               or{" "}
               <Link to="/coordinate" className="font-medium text-primary underline">quick trainer</Link>{" "}
               before the next rated game.

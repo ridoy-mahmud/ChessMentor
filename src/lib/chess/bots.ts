@@ -5,16 +5,20 @@
 
 import { Chess } from "chess.js";
 import { analyze } from "./engine";
-import rookieImg from "@/assets/bot-rookie.jpg";
-import challengerImg from "@/assets/bot-challenger.jpg";
-import strategistImg from "@/assets/bot-strategist.jpg";
-import tacticianImg from "@/assets/bot-tactician.jpg";
-import grandmasterImg from "@/assets/bot-grandmaster.jpg";
+import rookieImg from "@/assets/badge-rookie.png";
+import apprenticeImg from "@/assets/badge-apprentice.png";
+import challengerImg from "@/assets/badge-challenger.png";
+import strategistImg from "@/assets/badge-strategist.png";
+import oracleImg from "@/assets/badge-oracle.png";
+import tacticianImg from "@/assets/badge-tactician.png";
+import grandmasterImg from "@/assets/badge-grandmaster.png";
 
 export type BotId =
   | "rookie"
+  | "apprentice"
   | "challenger"
   | "strategist"
+  | "oracle"
   | "tactician"
   | "grandmaster";
 
@@ -24,6 +28,8 @@ export type BotProfile = {
   rating: string;
   tagline: string;
   avatar: string;
+  /** Badge tier accent used by the UI. */
+  tier: "bronze" | "copper" | "silver" | "steel" | "violet" | "crimson" | "gold";
   // Higher temperature → more likely to pick a suboptimal move.
   temperature: number;
   // Stockfish search depth.
@@ -47,6 +53,7 @@ export const BOTS: Record<BotId, BotProfile> = {
     rating: "~500",
     tagline: "Learning the ropes, drops pieces sometimes.",
     avatar: rookieImg,
+    tier: "bronze",
     temperature: 1.4,
     depth: 4,
     captureBias: 0.35,
@@ -55,12 +62,28 @@ export const BOTS: Record<BotId, BotProfile> = {
     onWin: "I got lucky! Rematch?",
     onDraw: "A draw against you feels like a win to me.",
   },
+  apprentice: {
+    id: "apprentice",
+    name: "Apprentice",
+    rating: "~750",
+    tagline: "Knows the openings, forgets the tactics.",
+    avatar: apprenticeImg,
+    tier: "copper",
+    temperature: 1.1,
+    depth: 5,
+    captureBias: 0.2,
+    aggressionBias: 0.05,
+    onLoss: "You punished my slip — noted.",
+    onWin: "My study is starting to pay off.",
+    onDraw: "Solid from both of us.",
+  },
   challenger: {
     id: "challenger",
     name: "Challenger",
-    rating: "~900",
+    rating: "~1000",
     tagline: "Solid basics, occasional tactical slip.",
     avatar: challengerImg,
+    tier: "silver",
     temperature: 0.9,
     depth: 6,
     captureBias: 0.1,
@@ -72,9 +95,10 @@ export const BOTS: Record<BotId, BotProfile> = {
   strategist: {
     id: "strategist",
     name: "Strategist",
-    rating: "~1300",
+    rating: "~1350",
     tagline: "Positional player, punishes obvious errors.",
     avatar: strategistImg,
+    tier: "steel",
     temperature: 0.55,
     depth: 10,
     captureBias: 0,
@@ -83,12 +107,28 @@ export const BOTS: Record<BotId, BotProfile> = {
     onWin: "Small edges added up.",
     onDraw: "A patient draw — no complaints.",
   },
+  oracle: {
+    id: "oracle",
+    name: "Oracle",
+    rating: "~1550",
+    tagline: "Prophylactic play — stops your plan before it starts.",
+    avatar: oracleImg,
+    tier: "violet",
+    temperature: 0.42,
+    depth: 12,
+    captureBias: 0,
+    aggressionBias: 0,
+    onLoss: "You found the idea I couldn't foresee.",
+    onWin: "I saw that plan three moves ago.",
+    onDraw: "Balance held. Predictable, in a good way.",
+  },
   tactician: {
     id: "tactician",
     name: "Tactician",
-    rating: "~1700",
+    rating: "~1800",
     tagline: "Sharp calculation, punishes tactics fast.",
     avatar: tacticianImg,
+    tier: "crimson",
     temperature: 0.3,
     depth: 14,
     captureBias: 0,
@@ -100,9 +140,10 @@ export const BOTS: Record<BotId, BotProfile> = {
   grandmaster: {
     id: "grandmaster",
     name: "Grandmaster",
-    rating: "~2100",
+    rating: "~2150",
     tagline: "Near-optimal play. Minimal human-like error.",
     avatar: grandmasterImg,
+    tier: "gold",
     temperature: 0.12,
     depth: 18,
     captureBias: 0,
@@ -115,11 +156,14 @@ export const BOTS: Record<BotId, BotProfile> = {
 
 export const BOT_ORDER: BotId[] = [
   "rookie",
+  "apprentice",
   "challenger",
   "strategist",
+  "oracle",
   "tactician",
   "grandmaster",
 ];
+
 
 // Weighted sample from an array of items with numeric weights.
 function weightedPick<T>(items: T[], weights: number[]): T {
@@ -224,10 +268,17 @@ export async function chooseBotMove(
 // Small helper — returns a "thinking" delay (ms) proportional to bot strength
 // and legal-move count so moves don't feel instant.
 export function botThinkingDelay(botId: BotId, legalMoves: number): number {
-  const base = { rookie: 400, challenger: 600, strategist: 900, tactician: 1200, grandmaster: 1600 }[
-    botId
-  ];
+  const base: Record<BotId, number> = {
+    rookie: 400,
+    apprentice: 500,
+    challenger: 600,
+    strategist: 900,
+    oracle: 1050,
+    tactician: 1200,
+    grandmaster: 1600,
+  };
+  const delay = base[botId];
   const jitter = Math.random() * 400;
   const complexity = Math.min(1000, legalMoves * 20);
-  return base + jitter + complexity;
+  return delay + jitter + complexity;
 }
