@@ -73,8 +73,10 @@ function CountUp({
 
 const BOT_TIER: Record<BotId, "muted" | "amber" | "teal"> = {
   rookie: "muted",
+  apprentice: "muted",
   challenger: "muted",
   strategist: "amber",
+  oracle: "amber",
   tactician: "amber",
   grandmaster: "teal",
 };
@@ -96,7 +98,7 @@ function Index() {
               <span className="text-primary">actually clicks.</span>
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-              A polished board, five personality bots, a probability-driven coach,
+              A polished board, seven personality bots, a probability-driven coach,
               and live analytics — in one warm, minimal place.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
@@ -154,7 +156,7 @@ function Index() {
               Choose your challenger
             </span>
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7">
             {BOT_ORDER.map((id) => {
               const b = BOTS[id];
               return (
@@ -171,7 +173,7 @@ function Index() {
                     width={96}
                     height={96}
                     loading="lazy"
-                    className="bot-avatar mx-auto h-20 w-20 rounded-full object-cover ring-2 ring-transparent transition-all group-hover:ring-primary/30"
+                    className="bot-avatar mx-auto h-20 w-20 object-contain drop-shadow-md transition-transform group-hover:scale-110"
                   />
                   <div className="mt-3 font-medium">{b.name}</div>
                   <div className="font-data text-xs text-muted-foreground">
@@ -196,15 +198,15 @@ function Index() {
           {[
             {
               icon: Timer,
-              title: "Puzzle Rush & Storm",
-              body: "Timed puzzle sprints with personal bests and a survival time bank.",
-              href: "/rush" as const,
+              title: "Puzzle Storm",
+              body: "Timed puzzle survival with a growing time bank and personal bests.",
+              href: "/storm" as const,
               tier: "amber" as const,
             },
             {
               icon: Target,
               title: "Trainer hub",
-              body: "Tactics, endgame, coordinate, opening, and vision — one cohesive place.",
+              body: "Tactics, endgame, coordinate, opening, vision, and guided practice in one place.",
               href: "/trainer" as const,
               tier: "teal" as const,
             },

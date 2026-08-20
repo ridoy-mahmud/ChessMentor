@@ -13,6 +13,8 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppShell } from "../components/AppShell";
 import { PageTransition } from "../components/PageTransition";
+import { AuthProvider } from "../lib/firebase/AuthProvider";
+
 
 // Inline script: apply saved theme before first paint to avoid FOUC.
 const themeBootstrap = `
@@ -144,11 +146,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AppShell>
-        <PageTransition>
-          <Outlet />
-        </PageTransition>
-      </AppShell>
+      <AuthProvider>
+        <AppShell>
+          <PageTransition>
+            <Outlet />
+          </PageTransition>
+        </AppShell>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
