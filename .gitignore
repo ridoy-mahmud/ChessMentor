@@ -18,12 +18,10 @@ dist-ssr
 .env
 .env.*
 !.env.example
-
 # Firebase CLI / local state
 .firebase/
 firebase-debug.log
 firebase-debug.*.log
-
 # Deployment helpers
 .vercel
 
